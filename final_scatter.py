@@ -55,14 +55,35 @@ for sex in sexes:
 fig1 = plt.figure(figsize=[16,12])
 ax1 = plt.subplot2grid((15,2), (0,0), rowspan=6, colspan=2)  # TOTAL, FEMALE, AND MALE
 #plt.setp(ax2.get_xticklabels(), visible=False) 
-ax2 = plt.subplot2grid((15,2), (7,0), rowspan=3, colspan=2)  # TOTAL
-ax3 = plt.subplot2grid((15,2), (11,0), rowspan=3)  # FEMALE
-ax4 = plt.subplot2grid((15,2), (11,1), rowspan=3)  # MALE
+ax2 = plt.subplot2grid((15,2), (8,0), rowspan=3, colspan=2)  # TOTAL
+ax3 = plt.subplot2grid((15,2), (12,0), rowspan=3)  # FEMALE
+ax4 = plt.subplot2grid((15,2), (12,1), rowspan=3)  # MALE
 
 # PLOTTING  DATA
 # Setting Axis Limits
-ymin = 5
-ymax = 25
+# Y - Axis
+ax1.set_ylim(0, 32)  # All
+ax2.set_ylim(9, 19)  # Total Sexes
+ax3.set_ylim(4, 9)  # Female Sexes
+ax4.set_ylim(14, 32)  # Male Sexes
+
+# X - Axis
+### Limit the X axis to only show 2000 - 2019
+ax1.set_xlim(2000, 2020)
+ax2.set_xlim(2000, 2020)
+ax3.set_xlim(2000, 2020)
+ax4.set_xlim(2000, 2020)
+plt.xticks(np.arange(2000, 2020, step=1))
+xticks = np.arange(2000, 2020, 1)
+xlabels = ["'00", "'01", "'02", "'03", "'04", "'05", "'06", "'07", "'08", "'09", "'10", "'11", "'12", "'13", "'14", "'15", "'16", "'17", "'18", "'19"]
+
+
+# SETTING TICK LABELS
+ax1.set_xlabel('Years')
+ax1.set_xticks(xticks, labels=xticks)
+ax2.set_xticks(xticks, labels=xticks)
+ax3.set_xticks(xticks, labels=xlabels)
+ax4.set_xticks(xticks, labels=xlabels)
 
 # Finding Max and Min Values for Rates
 # Sexes
@@ -72,6 +93,18 @@ max_f_sex = max(ss_sexes["FEMALE"][1])
 min_f_sex = min(ss_sexes["FEMALE"][1])
 max_m_sex = max(ss_sexes["MALE"][1])
 min_m_sex = min(ss_sexes["MALE"][1])
+
+
+# Plotting Sexes Data
+# SEXES: Total, All Sexes
+ax1.scatter(x=ss_sexes["TOTAL"][0], y=ss_sexes["TOTAL"][1], c='k', alpha=0.3, label="Total")
+ax1.scatter(x=ss_sexes["FEMALE"][0], y=ss_sexes["FEMALE"][1], c='crimson', alpha=0.3, label="Female")
+ax1.scatter(x=ss_sexes["MALE"][0], y=ss_sexes["MALE"][1], c='blue', alpha=0.3, label="Male")
+
+# Individual
+ax2.scatter(x=ss_sexes["TOTAL"][0], y=ss_sexes["TOTAL"][1], c='k', alpha=0.3, label="Total")
+ax3.scatter(x=ss_sexes["FEMALE"][0], y=ss_sexes["FEMALE"][1], c='crimson', alpha=0.3, label="Female")
+ax4.scatter(x=ss_sexes["MALE"][0], y=ss_sexes["MALE"][1], c='blue', alpha=0.3, label="Male")
 
 # Legend
 #ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 0.2), fancybox=True, shadow=True, ncol=7)
@@ -83,10 +116,18 @@ ax1.set_ylabel('Suicide Rate\nper 100,000 people')
 ax1.set_xlabel('Years') 
 
 # Axis 2-4 ('Suicide Rate\n(per 100,000 people)')
-ax2.set_title('Linear Regression for Suicide Mortality Rates')
+ax2.set_title('\nLinear Regression for Suicide Mortality Rates')
 ax2.set_ylabel('Total')
 ax3.set_ylabel('Female')
 ax4.set_ylabel('Male')
+
+#Figure Title
+fig1.suptitle('Comparing Annual Suicide Mortality Rates (2000-2019)\nBy Sexes', fontsize=16, ha='center')
+# Footer
+fig1.text(0.5, 0.025, "Source: World Health Organization 2024 data.who.int, Suicide mortality rate (per 100 000 population) [Indicator]. https://data.who.int/indicators/i/F08B4FD/16BBF41 (Accessed on 1 July 2024)\nVisualized by Lily Gates for AOSC247 at the University of Maryland", fontsize=7, ha='center')
+
+
+
 
 plt.show()
 
@@ -217,13 +258,6 @@ ax9.scatter(x=ss_ages["Y_GE85"][0], y=ss_ages["Y_GE85"][1], c='purple', alpha=0.
 
 # TITLES AND AXIS LABELS
 #Figure Title
-fig1.suptitle('Comparing Annual Suicide Mortality Rates (2000-2019)\nBy Sexes', fontsize=16, ha='center')
-# Footer
-fig1.text(0.5, 0.025, "Source: World Health Organization 2024 data.who.int, Suicide mortality rate (per 100 000 population) [Indicator]. https://data.who.int/indicators/i/F08B4FD/16BBF41 (Accessed on 1 July 2024)\nVisualized by Lily Gates for AOSC247 at the University of Maryland", fontsize=7, ha='center')
-
-
-
-
 fig2.suptitle('Comparing Annual Suicide Mortality Rates (2000-2019)\nBy Age Group', fontsize=16, ha='center')
 # Footer
 fig2.text(0.5, 0.025, "Source: World Health Organization 2024 data.who.int, Suicide mortality rate (per 100 000 population) [Indicator]. https://data.who.int/indicators/i/F08B4FD/16BBF41 (Accessed on 1 July 2024)\nVisualized by Lily Gates for AOSC247 at the University of Maryland", fontsize=7, ha='center')
