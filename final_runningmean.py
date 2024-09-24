@@ -46,9 +46,9 @@ sexes = ["TOTAL", "FEMALE", "MALE"]
 ss_sexes = {}
 for sex in sexes:
     s_sex = data_original[(data_original["DIM_SEX"] == sex)][["DIM_TIME", "RATE_PER_100000_N"]].groupby(["DIM_TIME"]).mean()
-    print(f"{sex}:")
-    print(s_sex)
-    ss_sexes[sex] = [s_sex.index.to_numpy(), s_sex.values]
+    #print(f"{sex}:")
+    #print(s_sex)
+    ss_sexes[sex] = [s_sex.index.to_numpy(), s_sex.values.ravel()]
 
 
 # SETTING UP THE FIGURE/PLOTS -- SEXES
@@ -69,10 +69,10 @@ ax4.set_ylim(14, 32)  # Male Sexes
 
 # X - Axis
 ### Limit the X axis to only show 2000 - 2019
-ax1.set_xlim(2000, 2020)
-ax2.set_xlim(2000, 2020)
-ax3.set_xlim(2000, 2020)
-ax4.set_xlim(2000, 2020)
+ax1.set_xlim(1999, 2020)
+ax2.set_xlim(1999, 2020)
+ax3.set_xlim(1999, 2020)
+ax4.set_xlim(1999, 2020)
 plt.xticks(np.arange(2000, 2020, step=1))
 xticks = np.arange(2000, 2020, 1)
 xlabels = ["'00", "'01", "'02", "'03", "'04", "'05", "'06", "'07", "'08", "'09", "'10", "'11", "'12", "'13", "'14", "'15", "'16", "'17", "'18", "'19"]
@@ -97,6 +97,7 @@ min_m_sex = min(ss_sexes["MALE"][1])
 
 # PLOTTING DATA
 # SEXES: Total, All Sexes
+'''
 ax1.scatter(x=ss_sexes["TOTAL"][0], y=ss_sexes["TOTAL"][1], c='k', alpha=0.3, label="Total")
 ax1.scatter(x=ss_sexes["FEMALE"][0], y=ss_sexes["FEMALE"][1], c='crimson', alpha=0.3, label="Female")
 ax1.scatter(x=ss_sexes["MALE"][0], y=ss_sexes["MALE"][1], c='blue', alpha=0.3, label="Male")
@@ -104,16 +105,33 @@ ax1.scatter(x=ss_sexes["MALE"][0], y=ss_sexes["MALE"][1], c='blue', alpha=0.3, l
 ax2.scatter(x=ss_sexes["TOTAL"][0], y=ss_sexes["TOTAL"][1], c='k', alpha=0.3, label="Total")
 ax3.scatter(x=ss_sexes["FEMALE"][0], y=ss_sexes["FEMALE"][1], c='crimson', alpha=0.3, label="Female")
 ax4.scatter(x=ss_sexes["MALE"][0], y=ss_sexes["MALE"][1], c='blue', alpha=0.3, label="Male")
+'''
 
+ax1.plot(ss_sexes["TOTAL"][0], ss_sexes["TOTAL"][1], marker='o', c='k', alpha=0.3, label="Total")
+ax1.plot(ss_sexes["FEMALE"][0], ss_sexes["FEMALE"][1], marker='o', c='crimson', alpha=0.3, label="Female")
+ax1.plot(ss_sexes["MALE"][0], ss_sexes["MALE"][1], marker='o', c='blue', alpha=0.3, label="Male")
+# Individual
+ax2.plot(ss_sexes["TOTAL"][0], ss_sexes["TOTAL"][1], marker='o', c='k', alpha=0.3, label="Total")
+ax3.plot(ss_sexes["FEMALE"][0], ss_sexes["FEMALE"][1], marker='o', c='crimson', alpha=0.3, label="Female")
+ax4.plot(ss_sexes["MALE"][0], ss_sexes["MALE"][1], marker='o', c='blue', alpha=0.3, label="Male")
 
 # RUNNING MEAN AND LINEAR REGRESSION (PREDICTION)
-# Running Mean (5 Year)
+# Running Mean (3 Year) # Doing 3 year because the data is rather small
 ## Generate Running Mean
 rm_rate = rm.running_mean((ss_sexes["TOTAL"][1]), 5)  # Using the Prof. function
 # Cannot do running mean on first and last 2 values, removes the 0 tails
-ax1.plot(ss_sexes["TOTAL"][0][2:-2], ss_sexes["TOTAL"][1][2:-2], c='rebeccapurple', label='5-yr Running Mean') 
+ax2.plot(ss_sexes["TOTAL"][0][2:-2], ss_sexes["TOTAL"][1][2:-2], c='black', linestyle='-', label='5-Yr Running Mean') 
 
-"""
+rm_rate = rm.running_mean((ss_sexes["FEMALE"][1]), 5)  # Using the Prof. function
+# Cannot do running mean on first and last 2 values, removes the 0 tails
+ax3.plot(ss_sexes["FEMALE"][0][2:-2], ss_sexes["FEMALE"][1][2:-2], c='black', linestyle='-', label='5-Yr Running Mean') 
+
+rm_rate = rm.running_mean((ss_sexes["MALE"][1]), 5)  # Using the Prof. function
+# Cannot do running mean on first and last 2 values, removes the 0 tails
+ax4.plot(ss_sexes["MALE"][0][2:-2], ss_sexes["MALE"][1][2:-2], c='black', linestyle='-', label='5-Yr Running Mean') 
+
+
+'''
 # Linear Fit
 ## Generate Linear Fit Coef
 coef_lin = np.polyfit(year, temp, 1)  # x value, y value, 1st order
@@ -133,13 +151,43 @@ print(lf)
 xfit_1f = np.linspace(year[0], year[-1]+27, 200)
 yfit_1f = lf(xfit_1f)
 plt.plot(xfit_1f, yfit_1f, ls='--', color='red', label='Linear Fit Projection to 2050')  # Red, dashed line, labeled
-"""
 
+
+# Linear Fit
+## Generate Linear Fit Coef
+# x value, y value, 1st order
+print(ss_sexes["TOTAL"][0])
+print(ss_sexes["TOTAL"][1])
+coef_lin = np.polyfit(ss_sexes["TOTAL"][0], ss_sexes["TOTAL"][1], 1)[1]
+print(coef_lin)
+
+## Generate Linear Fit Formula
+lf = np.poly1d(coef_lin)
+
+## Need New X Values
+ss_sexes["TOTAL"][0][2:-2]
+xfit = np.linspace(ss_sexes["TOTAL"][0][0], ss_sexes["TOTAL"][0][-1], 200)
+## Usig lf function Generate new y values
+yfit_1 = lf(xfit)
+
+ax1.plot(xfit, yfit_1, color='magenta', label='Linear Fit')  # Red, line, labeled
+#print("Linear Fit Formula:")
+#print(lf)
+
+# FUTURE PROJECTIONS -- from 2020 to 2050 (30 years)
+# Linear Fit (to 2050)
+xfit_1f = np.linspace(ss_sexes["TOTAL"][0][0], ss_sexes["TOTAL"][0][-1]+30, 200)
+yfit_1f = lf(xfit_1f)
+ax1.plot(xfit_1f, yfit_1f, ls='--', color='rebeccapurple', label='Linear Fit Projection to 2050') 
+'''
 
 # TITLES AND AXIS LABELS
 # Legend
 #ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 0.2), fancybox=True, shadow=True, ncol=7)
 ax1.legend(loc=0)
+ax2.legend(loc=0)
+ax3.legend(loc=0)
+ax4.legend(loc=0)
 
 # Axis 1 (Global)
 ax1.set_title('Annual Suicide Mortality Rates by Sex')
@@ -147,16 +195,15 @@ ax1.set_ylabel('Suicide Rate\nper 100,000 people')
 ax1.set_xlabel('Years') 
 
 # Axis 2-4 ('Suicide Rate\n(per 100,000 people)')
-ax2.set_title('\nLinear Regression for Suicide Mortality Rates')
-ax2.set_ylabel('Total')
-ax3.set_ylabel('Female')
-ax4.set_ylabel('Male')
+ax2.set_title('\n5-Year Running Mean for Suicide Mortality Rates')
+ax2.set_ylabel('Suicide Rate\nper 100,000 people')
+ax3.set_ylabel('Suicide Rate\nper 100,000 people')
+ax4.set_ylabel('Suicide Rate\nper 100,000 people')
 
 #Figure Title
 fig1.suptitle('Comparing Annual Suicide Mortality Rates (2000-2019)\nBy Sexes', fontsize=16, ha='center')
 # Footer
 fig1.text(0.5, 0.025, "Source: World Health Organization 2024 data.who.int, Suicide mortality rate (per 100 000 population) [Indicator]. https://data.who.int/indicators/i/F08B4FD/16BBF41 (Accessed on 1 July 2024)\nVisualized by Lily Gates for AOSC247 at the University of Maryland", fontsize=7, ha='center')
-
 
 plt.show()
 

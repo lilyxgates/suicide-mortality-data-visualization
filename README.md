@@ -1,0 +1,4 @@
+When the program is run it:
+1. Creates and displays a stacked ladder plot titled "Comparing Annual Suicide Mortality Rates (2000-2019) -- Comparing annual suicide mortality rates across different geographical regions and globally
+2. Creates and dispalys stacked line plot with 5-year running mean titled "Comparing Annual Suicide Mortality Rates (2000-2019) By Sexes" for suicide mortality rates among different sexes.
+3. Creates (but does NOT display) a histogram labeled for each year from 2000 to 2019. This is in the directory `hist_plots` -- (To create a gif of the histogram pngs, one can use Imagemagik’s convert command)
