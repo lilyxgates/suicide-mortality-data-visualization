@@ -53,7 +53,8 @@ Ensure the following Python modules are installed:
 Install dependencies using:  
 
 ```bash
-pip install cartopy h5py matplotlib numpy pandas```
+pip install cartopy h5py matplotlib numpy pandas
+```
 
 ---
 
@@ -65,12 +66,14 @@ pip install cartopy h5py matplotlib numpy pandas```
 
    ```bash
    python final_hist.py  
-   python final_ladder.py```
+   python final_ladder.py
+   ```
    
 Use ImageMagick to convert histogram PNGs to an animated GIF (optional):
 
 ```bash
-convert ../hist_plots/plot_*.png suicide_histogram_animation.gif```
+convert ../hist_plots/plot_*.png suicide_histogram_animation.gif
+```
    
 ## Future Features
 * Future trend predictions based on demographic data, using statistical or machine learning methods to forecast trends in suicide mortality rates.
