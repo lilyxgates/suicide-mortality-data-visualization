@@ -2,6 +2,7 @@
 
 **Author:** Lily Gates  
 **Date:** July 2024  
+**Data Source:** World Health Organization 2024 data.who.int, Suicide mortality rate (per 100 000 population) [Indicator]. https://data.who.int/indicators/i/F08B4FD/16BBF41 (Accessed on 1 July 2024)
 
 ## **Description**  
 This project visualizes trends in global suicide mortality rates from 2000 to 2019. The analysis compares geographic and economic regions across various demographic categories. Key visual outputs include:  
